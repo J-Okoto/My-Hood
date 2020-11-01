@@ -1,5 +1,5 @@
 {% load bootstrap4 %}
-
+{% load static%}
 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -13,8 +13,7 @@
 
     {% block styles %}
     {% bootstrap_css %}
-    
-    
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% endblock %}
 
     
@@ -22,7 +21,7 @@
   </head>
 
   <body>
-    
+    {% include "navbar.html" %}
     {% block content %}
 
     {% endblock %}
