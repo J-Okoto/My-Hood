@@ -3,7 +3,7 @@ from django.http import HttpResponse,Http404,HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from .models import neighbourhood,Business,Health,Authorities,Profile,notifications
-from .forms import ProfileForm,notificationsForm
+from .forms import ProfileForm,notificationsForm,BusinessForm
 import datetime as dt
 from django.http import JsonResponse
 import json
@@ -14,6 +14,14 @@ from django.contrib.auth.models import User
 
 @login_required(login_url='/accounts/login/')
 def welcome(request):
+    try:
+        if not request.user.is_authenticated:
+            return redirect('/accounts/login/')
+        current_user=request.user
+        profile =Profile.objects.get(username=current_user)
+    except ObjectDoesNotExist:
+        return redirect('create-profile')
+
     return render(request, 'welcome.html')
 
 
@@ -111,3 +119,20 @@ def businesses(request):
     businesses = Business.objects.filter(neighbourhood=profile.neighbourhood)
 
     return render(request,'businesses.html',{"businesses":businesses})
+
+
+def authorities(request):
+    current_user=request.user
+    profile=Profile.objects.get(username=current_user)
+    authorities = Authorities.objects.filter(neighbourhood=profile.neighbourhood)
+
+    return render(request,'authorities.html',{"authorities":authorities})
+
+def health(request):
+    current_user=request.user
+    profile=Profile.objects.get(username=current_user)
+    healthservices = Health.objects.filter(neighbourhood=profile.neighbourhood)
+
+    return render(request,'health.html',{"healthservices":healthservices})
+
+
