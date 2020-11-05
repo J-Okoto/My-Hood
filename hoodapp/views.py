@@ -10,6 +10,13 @@ import json
 from django.db.models import Q
 from django.contrib.auth.models import User
 
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .models import  neighbourhood
+from .serializer import HoodSerializer
+
+from rest_framework import status
+
 
 
 @login_required(login_url='/accounts/login/')
@@ -150,3 +157,19 @@ def search_results(request):
     else:
         message="You haven't searched for any term"
         return render(request,'search.html',{"message":message})
+
+
+
+
+class Hoodview(APIView):
+    def get(self, request, format=None):
+        all_hoods = neighbourhood.objects.all()
+        serializers = HoodSerializer(all_hoods, many=True)
+        return Response(serializers.data)
+
+    def post(self, request, format=None):
+        serializers = HoodSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)

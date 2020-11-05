@@ -15,6 +15,10 @@ urlpatterns=[
     url(r'^health',views.health, name='health'),
     url(r'^authorities',views.authorities, name='authorities'),
     url(r'^search/',views.search_results, name='search_results'),
+
+
+    url(r'^api/hood/$', views.Hoodview.as_view())
+
 ]
 
 if settings.DEBUG:
