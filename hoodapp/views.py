@@ -135,4 +135,18 @@ def health(request):
 
     return render(request,'health.html',{"healthservices":healthservices})
 
+def search_results(request):
+    current_user = request.user
+    profile =Profile.objects.get(username=current_user)
+    if 'business' in request.GET and request.GET["business"]:
+        search_term = request.GET.get("business")
+        searched_businesses = Business.search_business(search_term)
+        message=f"{search_term}"
 
+        print(searched_businesses)
+
+        return render(request,'business/search.html',{"message":message,"businesses":searched_businesses,"profile":profile})
+
+    else:
+        message="You haven't searched for any term"
+        return render(request,'search.html',{"message":message})

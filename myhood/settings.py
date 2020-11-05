@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'hoodapp',
     'bootstrap4',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
